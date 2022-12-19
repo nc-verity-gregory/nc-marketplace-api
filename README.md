@@ -10,7 +10,7 @@ Follow the instructions below to get it setup:
 
 In order to use this API for your sprint you will need to **fork** this repo and host your own version of the app.
 
-## Host your PSQL DB using ElephantSQL and Cyclic
+## Host your PSQL DB using ElephantSQL and Render
 
 Follow steps 2, 3, 7 and 8 from the [hosting notes](https://notes.northcoders.com/courses/js-back-end/api-hosting).
 
