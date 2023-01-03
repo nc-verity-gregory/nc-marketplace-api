@@ -14,6 +14,10 @@ const dbConfig = {
   seeds: {
     directory: "./db/seeds",
   },
+  pool: {
+    min: 1,
+    max: 2,
+  },
 };
 
 if (NODE_ENV === "production") {
