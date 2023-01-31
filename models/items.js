@@ -12,7 +12,6 @@ exports.selectItems = async ({
 }) => {
   return db('items')
     .select('*')
-    .where('item_id', 'NOT IN', db('orders').select('item_id'))
 
     .modify((query) => {
       if (category_name) query.where({ category_name });
