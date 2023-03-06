@@ -19,3 +19,14 @@ Follow steps 2, 3, 7 and 8 from the [hosting notes](https://notes.northcoders.co
 The documentation for the api is hosted on the path `/`. This contains a complete API reference with all of the endpoints available.
 
 Check you've got your API up and running by checking one of your endpoints, for example `/api/users`, which will provide a list of users.
+
+## Reseeding Databases
+
+This repo is attached to 4 services hosted on render.com
+
+- https://nc-marketplace-sem-1.onrender.com
+- https://nc-marketplace-sem-2.onrender.com
+- https://nc-marketplace-sem-3.onrender.com
+- https://nc-marketplace-sem-4.onrender.com
+
+Individual seeding scripts are listed in the `package.json` - `.env` files are however required 🔑
