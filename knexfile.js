@@ -1,5 +1,5 @@
-const { NODE_ENV = "dev" } = process.env;
-require("dotenv").config({ path: `./.env.${NODE_ENV}` });
+const { NODE_ENV = "dev", SEMINAR_GROUP } = process.env;
+require("dotenv").config({ path: `./.env.${NODE_ENV}.${SEMINAR_GROUP}` });
 
 const { DATABASE_URL } = process.env;
 

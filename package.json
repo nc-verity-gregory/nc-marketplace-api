@@ -10,6 +10,10 @@
     "setup-dbs": "psql -f db/setup.sql",
     "seed-dev": "knex seed:run",
     "seed-prod": "NODE_ENV=production knex seed:run",
+    "seed-prod-seminar-1": "NODE_ENV=production SEMINAR_GROUP=1 knex seed:run",
+    "seed-prod-seminar-2": "NODE_ENV=production SEMINAR_GROUP=2 knex seed:run",
+    "seed-prod-seminar-3": "NODE_ENV=production SEMINAR_GROUP=3 knex seed:run",
+    "seed-prod-seminar-4": "NODE_ENV=production SEMINAR_GROUP=4 knex seed:run",
     "build-docs": "cd docs && npm run build -- --out-dir ../public/build",
     "dev-docs": "cd docs && npm start",
     "gen-dev-data": "node db/data/genFakeData"
