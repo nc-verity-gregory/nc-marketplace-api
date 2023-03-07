@@ -29,4 +29,5 @@ This repo is attached to 4 services hosted on render.com
 - https://nc-marketplace-sem-3.onrender.com
 - https://nc-marketplace-sem-4.onrender.com
 
-Individual seeding scripts are listed in the `package.json` - `.env` files are however required 🔑
+Individual seeding scripts are listed in the `package.json`
+The app also accepts a POST request to `/api/reset` to do this
