@@ -31,3 +31,5 @@ This repo is attached to 4 services hosted on render.com
 
 Individual seeding scripts are listed in the `package.json`
 The app also accepts a POST request to `/api/reset` to do this
+
+- `npm run interval-reseed` to leave a process running and reseed every 15 minutes
