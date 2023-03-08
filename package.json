@@ -16,7 +16,8 @@
     "seed-prod-seminar-4": "NODE_ENV=production SEMINAR_GROUP=4 knex seed:run",
     "build-docs": "cd docs && npm run build -- --out-dir ../public/build",
     "dev-docs": "cd docs && npm start",
-    "gen-dev-data": "node db/data/genFakeData"
+    "gen-dev-data": "node db/data/genFakeData",
+    "interval-reseed": "node interval-reseeder.js"
   },
   "keywords": [],
   "author": "",
