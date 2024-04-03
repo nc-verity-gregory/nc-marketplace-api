@@ -2,46 +2,41 @@ const {
   selectBasketByUsername,
   postItemToBasket,
   deleteItemFromBasket,
-} = require('../models/basket');
-const { selectItemById } = require('../models/items');
+} = require("../models/basket");
+const { getColumnNames } = require("../models/getColNames");
+const { selectItemById } = require("../models/items");
 const {
   selectOrdersByUsername,
   postItemToOrders,
-} = require('../models/orders');
+} = require("../models/orders");
 const {
   selectUsers,
   insertUser,
   selectUserByUsername,
   updateUserByUsername,
-} = require('../models/users');
-const schemas = require('../schemas');
+} = require("../models/users");
 
 exports.getUsers = async (req, res, next) => {
   const users = await selectUsers();
-  res.send({ users });
+  res.status(200).send({ users });
 };
 
 exports.postUser = async (req, res, next) => {
-  const newUser = req.body;
-  await schemas.newUser.validate(newUser);
-  const user = await insertUser(newUser);
+  const userObj = req.body;
+  const user = await insertUser(userObj);
   res.status(201).send({ user });
 };
 
 exports.getUserByUsername = async (req, res, next) => {
   const user = await selectUserByUsername(req.params.username);
-  res.send({ user });
+  res.status(200).send({ user });
 };
 
 exports.patchUserByUsername = async (req, res, next) => {
   const userUpdates = req.body;
-  await schemas.userUpdates.validate(userUpdates);
-  const updatedUser = await updateUserByUsername(
-    req.params.username,
-    userUpdates
-  );
-  const user = await selectUserByUsername(updatedUser.username);
-  res.send({ user });
+  const { username } = req.params;
+  const user = await updateUserByUsername(username, userUpdates);
+  res.status(200).send({ user });
 };
 
 exports.getUsersBasket = async (req, res, next) => {
@@ -49,21 +44,21 @@ exports.getUsersBasket = async (req, res, next) => {
     selectBasketByUsername(req.params.username),
     selectUserByUsername(req.params.username),
   ]);
+
   res.send({ items });
 };
 
 exports.postItemToBasket = async (req, res, next) => {
-  await schemas.newBasketItem.validate(req.body);
   const [item] = await Promise.all([
     selectItemById(req.body.item_id),
     selectUserByUsername(req.params.username),
   ]);
   await postItemToBasket(req.params.username, req.body.item_id);
+
   res.status(201).send({ item });
 };
 
 exports.postItemToOrders = async (req, res, next) => {
-  await schemas.newOrderItem.validate(req.body);
   const [item] = await Promise.all([
     selectItemById(req.body.item_id),
     selectUserByUsername(req.params.username),

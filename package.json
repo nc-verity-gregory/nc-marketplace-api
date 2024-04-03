@@ -5,19 +5,12 @@
   "main": "app.js",
   "scripts": {
     "test": "jest --watch",
-    "dev": "nodemon listen.js",
     "start": "node listen.js",
     "setup-dbs": "psql -f db/setup.sql",
-    "seed-dev": "knex seed:run",
-    "seed-prod": "NODE_ENV=production knex seed:run",
-    "seed-prod-seminar-1": "NODE_ENV=production SEMINAR_GROUP=1 knex seed:run",
-    "seed-prod-seminar-2": "NODE_ENV=production SEMINAR_GROUP=2 knex seed:run",
-    "seed-prod-seminar-3": "NODE_ENV=production SEMINAR_GROUP=3 knex seed:run",
-    "seed-prod-seminar-4": "NODE_ENV=production SEMINAR_GROUP=4 knex seed:run",
+    "seed": "node db/seeds/run-seed.js",
+    "seed-test": "NODE_ENV=test node db/seeds/run-seed.js",
     "build-docs": "cd docs && npm run build -- --out-dir ../public/build",
-    "dev-docs": "cd docs && npm start",
-    "gen-dev-data": "node db/data/genFakeData",
-    "interval-reseed": "node interval-reseeder.js"
+    "dev-docs": "cd docs && npm start"
   },
   "keywords": [],
   "author": "",
@@ -26,17 +19,14 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "knex": "^0.95.11",
-    "lodash": "^4.17.21",
-    "pg": "^8.7.1",
-    "yup": "^0.32.11"
+    "pg": "^8.11.3"
   },
   "devDependencies": {
     "faker": "^5.5.3",
     "jest": "^27.2.5",
     "jest-extended": "^1.0.0",
     "jest-sorted": "^1.0.12",
-    "nodemon": "^2.0.13",
+    "pg-format": "^1.0.4",
     "supertest": "^6.1.6"
   },
   "jest": {

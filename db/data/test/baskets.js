@@ -1,10 +1,10 @@
 module.exports = [
   {
-    username: 'Paul-R',
+    user: "Paul-R",
     item_id: 3,
   },
   {
-    username: 'Paul-R',
+    user: "Paul-R",
     item_id: 4,
   },
 ];
