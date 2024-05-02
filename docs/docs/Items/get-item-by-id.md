@@ -16,7 +16,8 @@ Responds with the requested item
     "description": "Defo the real deal and not a prop from Indiana Jones",
     "img_url": "https://test.com/The Holy Grail.jpg",
     "price": 5000,
-    "category_name": "Relics"
+    "category_name": "Relics",
+    "listed_by": "Paul-C"
   }
 }
 ```

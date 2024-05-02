@@ -24,3 +24,4 @@ sidebar_position: 1
 - [DELETE /api/users/:username/basket](/docs/Basket/delete-item-from-basket)
 - [GET /api/users/:username/orders](/docs/Orders/get-orders)
 - [POST /api/users/:username/orders](/docs/Orders/post-item-to-orders)
+- [GET /api/users/:username/listed_items](/docs/Users/get-listed-items-by-username)

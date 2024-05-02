@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { use } = require("../routes/categories");
 
 exports.selectUsers = async () => {
   const queryStr = "SELECT * FROM users";
@@ -90,4 +91,18 @@ exports.updateUserByUsername = async (
   const { rows } = await db.query(queryStr, valuesArr);
 
   return rows[0];
+};
+
+exports.fetchUsersItems = async (username) => {
+  const queryStrItems = `WITH allItems AS (
+    SELECT items.item_id, items.item_name, items.description, items.price, items.category_name, users.username AS listed_by 
+    FROM items 
+    LEFT JOIN users ON items.listed_by = users.user_id
+)
+SELECT * 
+FROM allItems 
+WHERE listed_by = $1;`;
+
+  const { rows } = await db.query(queryStrItems, [username]);
+  return rows;
 };

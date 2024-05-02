@@ -32,7 +32,8 @@ Lists all available items. (Items that have already been ordered will not be lis
       "description": "Defo the real deal and not a prop from Indiana Jones",
       "img_url": "https://test.com/The Holy Grail.jpg",
       "price": 5000,
-      "category_name": "Relics"
+      "category_name": "Relics",
+      "listed_by": "Paul-R"
     },
     {
       "item_id": 2,
@@ -40,7 +41,8 @@ Lists all available items. (Items that have already been ordered will not be lis
       "description": "Not to be entrusted to a noob",
       "img_url": "https://test.com/1000-truths.jpg",
       "price": 2999,
-      "category_name": "Relics"
+      "category_name": "Relics",
+      "listed_by": "Ant"
     }
   ],
   "total_items": 2

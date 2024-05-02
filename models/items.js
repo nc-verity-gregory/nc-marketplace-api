@@ -17,8 +17,9 @@ exports.selectItems = async (category_name, limit, p, queries) => {
 
   // default query string
   let queryStr = `WITH allItems AS (
-    SELECT items.*
+    SELECT items.*, users.username AS listed_by
     FROM items
+    LEFT JOIN users ON items.listed_by = users.user_id
     LEFT JOIN orders ON items.item_id = orders.item_id
     WHERE orders.item_id IS NULL
 ),
@@ -134,9 +135,10 @@ exports.selectItemById = async (item_id) => {
       msg: "item_id is a required field",
     });
   }
-  const { rows } = await db.query(`SELECT * FROM items WHERE item_id = $1`, [
-    item_id,
-  ]);
+  const { rows } = await db.query(
+    `SELECT items.item_id, items.item_name, items.description, items.img_url, items.price, items.category_name, users.username AS listed_by FROM items LEFT JOIN users ON items.listed_by = users.user_id WHERE item_id = $1`,
+    [item_id]
+  );
   if (rows.length === 0) {
     return Promise.reject({ status: 404, msg: "item not found" });
   }
@@ -179,8 +181,22 @@ exports.insertItem = async (item) => {
   return rows[0];
 };
 
-exports.deleteItemById = async (item_id) => {
-  await db.query(`DELETE FROM orders WHERE item_id = $1 RETURNING *`, [
+exports.deleteItemById = async (item_id, username) => {
+  const itemCheck = `
+WITH allItems AS (
+    SELECT items.item_id, items.item_name, items.description, items.price, items.category_name, users.username AS listed_by 
+    FROM items 
+    LEFT JOIN users ON items.listed_by = users.user_id
+)
+SELECT * 
+FROM allItems
+WHERE listed_by = $1 AND item_id = $2`;
+
+  const foundItem = await db.query(itemCheck, [username, item_id]);
+  if (foundItem.rows.length === 0) {
+    return Promise.reject({ status: 404, msg: "No item matches parameters" });
+  }
+  await db.query(`DELETE FROM orders WHERE item_id = $1  RETURNING *`, [
     item_id,
   ]);
   await db.query(`DELETE FROM baskets WHERE item_id = $1 RETURNING *`, [

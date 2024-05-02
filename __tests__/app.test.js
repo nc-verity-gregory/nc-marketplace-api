@@ -350,7 +350,17 @@ describe("GET /api/items", () => {
       "The sword of 1000 truths",
     ]);
   });
+  it("200 - items have a listed_by key with the username of the user who listed it", async () => {
+    const {
+      body: { items },
+    } = await request(app).get("/api/items").expect(200);
 
+    expect(items).toBeArray();
+    expect(items.length).toBe(6);
+    items.forEach((item) => {
+      expect(typeof item.listed_by).toBe("string");
+    });
+  });
   it("400 - for invalid sort_by", async () => {
     const {
       body: { msg },
@@ -571,6 +581,12 @@ describe("GET /api/items/:item_id", () => {
       })
     );
   });
+  it("200 - item has the username of the person who listed that item on the response", async () => {
+    const {
+      body: { item },
+    } = await request(app).get("/api/items/1").expect(200);
+    expect(item.listed_by).toBe("Paul-R");
+  });
   it("404 - for a non-existent item_id", async () => {
     const {
       body: { msg },
@@ -581,26 +597,6 @@ describe("GET /api/items/:item_id", () => {
     const {
       body: { msg },
     } = await request(app).get("/api/items/notAnInt").expect(400);
-    expect(msg).toBe("Bad request");
-  });
-});
-
-describe("DELETE /api/items/:item_id", () => {
-  it("204 - responds with no content", async () => {
-    await request(app).delete("/api/items/1").expect(204);
-  });
-  it("204 - cascades to baskets and orders", async () => {
-    await request(app).delete("/api/items/3").expect(204);
-    await request(app).delete("/api/items/5").expect(204);
-  });
-  it("404 - for a non-existent item_id", async () => {
-    const { body } = await request(app).delete("/api/items/1000").expect(404);
-    expect(body.msg).toBe("item not found");
-  });
-  it("400 - for a non-integer item_id", async () => {
-    const {
-      body: { msg },
-    } = await request(app).delete("/api/items/notAnInt").expect(400);
     expect(msg).toBe("Bad request");
   });
 });
@@ -804,5 +800,59 @@ describe("POST /api/reset", () => {
     await request(app).get("/api/users/Doug").expect(200);
     await request(app).post("/api/reset").expect(200);
     await request(app).get("/api/users/Doug").expect(404);
+  });
+});
+
+describe("GET /api/users/:username/listed_items", () => {
+  it("200: Responds with an array of items listed by the requested username", async () => {
+    const {
+      body: { items },
+    } = await request(app).get("/api/users/Paul-R/listed_items").expect(200);
+    expect(items.length).toBe(3);
+    items.forEach((item) => expect(item.listed_by).toBe("Paul-R"));
+  });
+  it("404: Responds with a 404 for a username not in the database", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/users/Verity/listed_items").expect(404);
+    expect(msg).toBe("username not found");
+  });
+});
+
+describe("DELETE /api/item/:item_id/:username", () => {
+  it("204 - responds with no content when the item is linked to the user_id", async () => {
+    await request(app).delete("/api/items/1/Paul-R").expect(204);
+  });
+  it("204 - cascades to baskets", async () => {
+    await request(app).delete("/api/items/3/Paul-C").expect(204);
+    const {
+      body: { items },
+    } = await request(app).get("/api/users/Paul-R/basket");
+    expect(items.length).toBe(1);
+  });
+  it("204 - cascades to orders", async () => {
+    await request(app).delete("/api/items/5/Paul-C").expect(204);
+    const {
+      body: { items },
+    } = await request(app).get("/api/users/Paul-R/orders");
+    expect(items.length).toBe(0);
+  });
+  it("404 - for a non-existent item_id", async () => {
+    const { body } = await request(app)
+      .delete("/api/items/1000/Paul-R")
+      .expect(404);
+    expect(body.msg).toBe("No item matches parameters");
+  });
+  it("404 - for a non-existent username", async () => {
+    const {
+      body: { msg },
+    } = await request(app).delete("/api/items/1/Verity").expect(404);
+    expect(msg).toBe("No item matches parameters");
+  });
+  it("400 - for a non-integer item_id", async () => {
+    const {
+      body: { msg },
+    } = await request(app).delete("/api/items/notAnInt/1").expect(400);
+    expect(msg).toBe("Bad request");
   });
 });

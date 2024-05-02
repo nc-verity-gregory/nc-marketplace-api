@@ -6,7 +6,7 @@ sidebar_position: 4
 
 Removes the requested item from the users Basket.
 
-**nb** The item is not permanently deleted and is still available. Use DELETE /api/items/:item_id to remove the item altogether.
+**nb** The item is not permanently deleted and is still available. Items can only be permanently deleted by the user that listed them.
 
 ## Example Response
 

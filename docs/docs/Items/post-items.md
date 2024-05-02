@@ -13,6 +13,7 @@ Accepts the following keys:
 - item_name: String **required**
 - img_url: String **required**
 - price: Integer - Prices are measured in pence. Set to zero for free items **required**
+- listed_by - Number **required** - the user_id of the logged in user, must exist in users table
 - description: String
 - category_name: String - existing category_name
 
@@ -22,7 +23,8 @@ Accepts the following keys:
   "description": "testy mc test face",
   "img_url": "https://test.com/Test-item.jpg",
   "price": 100,
-  "category_name": "Relics"
+  "category_name": "Relics",
+  "listed_by": 1
 }
 ```
 
@@ -36,7 +38,8 @@ Accepts the following keys:
     "description": "testy mc test face",
     "img_url": "https://test.com/Test-item.jpg",
     "price": 100,
-    "category_name": "Relics"
+    "category_name": "Relics",
+    "listed_by": "Paul-R"
   }
 }
 ```
