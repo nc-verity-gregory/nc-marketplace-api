@@ -39,8 +39,7 @@ const setResponseMessage = (req) => {
     };
   }
 };
-let docsCounter = 0;
-let apiCounter = 0;
+
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000,
   limit: greenListCampusIpAddresses,
@@ -52,7 +51,6 @@ const limiter = rateLimit({
   },
   skip: (req, res) => {
     if (!req.path.startsWith("/api")) {
-      docsCounter++;
       return true;
     }
   },
@@ -63,17 +61,6 @@ app.use(cors());
 if (process.env.NODE_ENV !== "test") {
   app.use(limiter);
 }
-
-app.use((req, res, next) => {
-  apiCounter++;
-  console.log({
-    apiCounter,
-    docsCounter,
-    "req.path": req.path,
-    ipAddress: req.headers["true-client-ip"],
-  });
-  next()
-});
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public", "build")));
