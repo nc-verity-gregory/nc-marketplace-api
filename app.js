@@ -51,7 +51,7 @@ const limiter = rateLimit({
     return req.headers["true-client-ip"];
   },
   skip: (req, res) => {
-    if (req.path.startsWith("/docs")) {
+    if (!req.path.startsWith("/api")) {
       docsCounter++;
       return true;
     }
