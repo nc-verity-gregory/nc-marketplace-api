@@ -15,7 +15,7 @@ afterAll(async () => {
 });
 
 describe("Rate Limiter", () => {
-  it("should respond with an error if more than 25 requests are made within 3 minutes", async () => {
+  it("should respond with an error if more than 25 requests are made within 1 minutes", async () => {
     const promiseToMakeApiRequest = [];
     for (let index = 0; index < 25; index++) {
       promiseToMakeApiRequest.push(request(app).get("/api/users"));

@@ -64,9 +64,15 @@ if (process.env.NODE_ENV !== "test") {
   app.use(limiter);
 }
 
-app.use((req, res) => {
+app.use((req, res, next) => {
   apiCounter++;
-  console.log({ apiCounter, docsCounter, "req.path": req.path });
+  console.log({
+    apiCounter,
+    docsCounter,
+    "req.path": req.path,
+    ipAddress: req.headers["true-client-ip"],
+  });
+  next()
 });
 
 app.use(express.json());
