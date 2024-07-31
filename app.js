@@ -31,11 +31,11 @@ const setResponseMessage = (req) => {
     req.headers["true-client-ip"] === "185.205.174.138"
   ) {
     return {
-      msg: "Received too many requests from your campus ip address. You and your colleagues should check for infinite loops - once this is resolved, you can send requests again in 3 minutes",
+      msg: "Received too many requests from your campus ip address. You and your colleagues should check for infinite loops - once this is resolved, you can send requests again in 1 minute",
     };
   } else {
     return {
-      msg: "Received too many requests - check your code for infinite loops. You can send requests again in 3 minutes.",
+      msg: "Received too many requests - check your code for infinite loops. You can send requests again in 1 minute.",
     };
   }
 };
@@ -48,6 +48,11 @@ const limiter = rateLimit({
   standardHeaders: "draft-7",
   keyGenerator: (req) => {
     return req.headers["true-client-ip"];
+  },
+  skip: (req, res) => {
+    if (req.path.startsWith("/docs")) {
+      return true;
+    }
   },
 });
 

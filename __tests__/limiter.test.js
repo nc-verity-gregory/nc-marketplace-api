@@ -26,8 +26,20 @@ describe("Rate Limiter", () => {
       .expect(429)
       .then(({ body: { msg } }) => {
         expect(msg).toBe(
-          "Received too many requests - check your code for infinite loops. You can send requests again in 3 minutes."
+          "Received too many requests - check your code for infinite loops. You can send requests again in 1 minute."
         );
+      });
+  });
+  it("should allow any number of requests to the /docs endpoints", async () => {
+    const promiseToMakeApiRequest = [];
+    for (let index = 0; index < 25; index++) {
+      promiseToMakeApiRequest.push(request(app).get("/docs/api-ref"));
+    }
+    await Promise.all(promiseToMakeApiRequest);
+    await request(app)
+      .get("/docs/api-ref")
+      .then((res) => {
+        expect(res.status).not.toBe(429);
       });
   });
 });
