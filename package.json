@@ -20,6 +20,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-rate-limit": "^7.3.1",
+    "pg-format": "^1.0.4",
     "pg": "^8.11.3"
   },
   "devDependencies": {
@@ -27,7 +28,6 @@
     "jest": "^27.2.5",
     "jest-extended": "^1.0.0",
     "jest-sorted": "^1.0.12",
-    "pg-format": "^1.0.4",
     "supertest": "^6.1.6"
   },
   "jest": {
