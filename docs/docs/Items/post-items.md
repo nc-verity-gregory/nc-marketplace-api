@@ -11,10 +11,11 @@ Adds a new item.
 Accepts the following keys:
 
 - item_name: String **required**
-- img_url: String **required**
+- img_url: String
 - price: Integer - Prices are measured in pence. Set to zero for free items **required**
-- description: String
-- category_name: String - existing category_name
+- description: String **required**
+- category_name: String - existing category_name **required**
+- listed_by: Number - user_id of an existing user
 
 ```json
 {
@@ -22,7 +23,8 @@ Accepts the following keys:
   "description": "testy mc test face",
   "img_url": "https://test.com/Test-item.jpg",
   "price": 100,
-  "category_name": "Relics"
+  "category_name": "Relics",
+  "listed_by": 1
 }
 ```
 
@@ -36,7 +38,8 @@ Accepts the following keys:
     "description": "testy mc test face",
     "img_url": "https://test.com/Test-item.jpg",
     "price": 100,
-    "category_name": "Relics"
+    "category_name": "Relics",
+    "listed_by": 1
   }
 }
 ```
