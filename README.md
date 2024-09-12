@@ -15,7 +15,15 @@ In order to use this API for your sprint you will need to **fork** this repo and
 Follow steps 2, 3, 7 and 8 from the [hosting notes](https://notes.northcoders.com/courses/js-back-end/api-hosting).
 
 ## Docs
-
+If you need to update the documentation for this api you will need to do the following:
+- cd into the docs folder and run `npm i`
+- update the documentation inside the nested docs folder
+- cd back to root
+- <br>Use node 16 to run the the following commands<br>
+- `npm run dev-docs` to view your changes locally
+- `npm run build-docs` to build your changes into the public folder
+- push changes to see reflected in hosted documentation.
+  
 The documentation for the api is hosted on the path `/`. This contains a complete API reference with all of the endpoints available.
 
 Check you've got your API up and running by checking one of your endpoints, for example `/api/users`, which will provide a list of users.
