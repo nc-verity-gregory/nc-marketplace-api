@@ -15,6 +15,7 @@ const {
   selectUserByUsername,
   updateUserByUsername,
   fetchUsersItems,
+  removeItemById,
 } = require("../models/users");
 
 exports.getUsers = async (req, res) => {
@@ -91,4 +92,10 @@ exports.getUsersItems = async (req, res) => {
   ]);
 
   res.status(200).send({ items });
+};
+
+exports.deleteItemById = async (req, res) => {
+  const { item_id, username } = req.params;
+  await removeItemById(item_id, username);
+  res.status(204).send();
 };

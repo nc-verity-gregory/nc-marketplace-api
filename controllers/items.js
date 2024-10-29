@@ -1,11 +1,5 @@
 const { selectCategoryByName } = require("../models/categories");
-const {
-  selectItems,
-  insertItem,
-  selectItemById,
-  deleteItemById,
-} = require("../models/items");
-const { fetchUsersItems } = require("../models/users");
+const { selectItems, insertItem, selectItemById } = require("../models/items");
 
 exports.getItems = async (req, res) => {
   const { category_name, limit, p, ...queries } = req.query;
@@ -24,11 +18,4 @@ exports.getItemById = async (req, res) => {
   const { item_id } = req.params;
   const item = await selectItemById(item_id);
   res.status(200).send({ item });
-};
-
-exports.deleteItemById = async (req, res) => {
-  const { item_id, username } = req.params;
-
-  await deleteItemById(item_id, username);
-  res.status(204).send();
 };

@@ -257,7 +257,6 @@ describe("GET /api/items", () => {
 
     expect(items).toBeArray();
     expect(items.length).toBe(6);
-
     items.forEach((item) => {
       expect(item).toEqual(
         expect.objectContaining({
@@ -350,7 +349,7 @@ describe("GET /api/items", () => {
       "The sword of 1000 truths",
     ]);
   });
-  it("200 - items have a listed_by key with the username of the user who listed it", async () => {
+  it("200 - items have a seller name key with the username of the user who listed it", async () => {
     const {
       body: { items },
     } = await request(app).get("/api/items").expect(200);
@@ -358,7 +357,7 @@ describe("GET /api/items", () => {
     expect(items).toBeArray();
     expect(items.length).toBe(6);
     items.forEach((item) => {
-      expect(typeof item.listed_by).toBe("string");
+      expect(typeof item.seller_name).toBe("string");
     });
   });
   it("400 - for invalid sort_by", async () => {
@@ -466,6 +465,20 @@ describe("GET /api/items", () => {
       body: { msg },
     } = await request(app).get("/api/items?max_price=1.5").expect(400);
     expect(msg).toBe("max_price must be an integer");
+  });
+  it("200 - items can be filtered by user that listed them", async () => {
+    const {
+      body: { items },
+    } = await request(app).get("/api/items?username=Paul-C").expect(200);
+    const itemNames = items.map((item) => item.item_name);
+
+    expect(items.length).toBe(4);
+    expect(itemNames).toIncludeAllMembers([
+      "1990s Gameboy",
+      "New iMac",
+      "Drinks Globe",
+      "Worlds largest ball of yarn",
+    ]);
   });
 });
 
@@ -819,19 +832,19 @@ describe("GET /api/users/:username/listed_items", () => {
   });
 });
 
-describe("DELETE /api/item/:item_id/:username", () => {
+describe("DELETE /api/users/:username/items/:item_id", () => {
   it("204 - responds with no content when the item is linked to the user_id", async () => {
-    await request(app).delete("/api/items/1/Paul-R").expect(204);
+    await request(app).delete("/api/users/Paul-R/items/1").expect(204);
   });
   it("204 - cascades to baskets", async () => {
-    await request(app).delete("/api/items/3/Paul-C").expect(204);
+    await request(app).delete("/api/users/Paul-C/items/3").expect(204);
     const {
       body: { items },
     } = await request(app).get("/api/users/Paul-R/basket");
     expect(items.length).toBe(1);
   });
   it("204 - cascades to orders", async () => {
-    await request(app).delete("/api/items/5/Paul-C").expect(204);
+    await request(app).delete("/api/users/Paul-C/items/5").expect(204);
     const {
       body: { items },
     } = await request(app).get("/api/users/Paul-R/orders");
@@ -839,20 +852,22 @@ describe("DELETE /api/item/:item_id/:username", () => {
   });
   it("404 - for a non-existent item_id", async () => {
     const { body } = await request(app)
-      .delete("/api/items/1000/Paul-R")
+      .delete("/api/users/Paul-R/items/1000")
       .expect(404);
     expect(body.msg).toBe("No item matches parameters");
   });
   it("404 - for a non-existent username", async () => {
     const {
       body: { msg },
-    } = await request(app).delete("/api/items/1/Verity").expect(404);
+    } = await request(app).delete("/api/users/Verity/items/1").expect(404);
     expect(msg).toBe("No item matches parameters");
   });
   it("400 - for a non-integer item_id", async () => {
     const {
       body: { msg },
-    } = await request(app).delete("/api/items/notAnInt/1").expect(400);
+    } = await request(app)
+      .delete("/api/users/Paul-R/items/notAnInt")
+      .expect(400);
     expect(msg).toBe("Bad request");
   });
 });

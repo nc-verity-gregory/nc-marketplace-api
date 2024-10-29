@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-const { use } = require("../routes/categories");
 
 exports.selectUsers = async () => {
   const queryStr = "SELECT * FROM users";
@@ -94,15 +93,45 @@ exports.updateUserByUsername = async (
 };
 
 exports.fetchUsersItems = async (username) => {
-  const queryStrItems = `WITH allItems AS (
+  const queryStrItems = `WITH all_Items AS (
     SELECT items.item_id, items.item_name, items.description, items.price, items.category_name, users.username AS listed_by 
     FROM items 
     LEFT JOIN users ON items.listed_by = users.user_id
 )
 SELECT * 
-FROM allItems 
+FROM all_Items 
 WHERE listed_by = $1;`;
 
   const { rows } = await db.query(queryStrItems, [username]);
   return rows;
+};
+
+exports.removeItemById = async (item_id, username) => {
+  const itemCheck = `
+WITH all_Items AS (
+    SELECT items.item_id, items.item_name, items.description, items.price, items.category_name, users.username AS listed_by 
+    FROM items 
+    LEFT JOIN users ON items.listed_by = users.user_id
+)
+SELECT * 
+FROM all_Items
+WHERE listed_by = $1 AND item_id = $2`;
+
+  const foundItem = await db.query(itemCheck, [username, item_id]);
+  if (foundItem.rows.length === 0) {
+    return Promise.reject({ status: 404, msg: "No item matches parameters" });
+  }
+  await db.query(`DELETE FROM orders WHERE item_id = $1  RETURNING *`, [
+    item_id,
+  ]);
+  await db.query(`DELETE FROM baskets WHERE item_id = $1 RETURNING *`, [
+    item_id,
+  ]);
+  const { rows } = await db.query(
+    `DELETE FROM items WHERE item_id = $1 RETURNING *`,
+    [item_id]
+  );
+  if (rows.length === 0) {
+    return Promise.reject({ status: 404, msg: "item not found" });
+  }
 };

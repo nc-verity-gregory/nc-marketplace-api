@@ -1,11 +1,6 @@
 const express = require("express");
 const { withErrorHandling } = require("../controllers/errors");
-const {
-  getItems,
-  postItem,
-  getItemById,
-  deleteItemById,
-} = require("../controllers/items");
+const { getItems, postItem, getItemById } = require("../controllers/items");
 const itemsRouter = express.Router();
 
 itemsRouter
@@ -15,7 +10,4 @@ itemsRouter
 
 itemsRouter.route("/:item_id").get(withErrorHandling(getItemById));
 
-itemsRouter
-  .route("/:item_id/:username")
-  .delete(withErrorHandling(deleteItemById));
 module.exports = itemsRouter;
