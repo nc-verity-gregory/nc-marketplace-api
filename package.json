@@ -9,6 +9,7 @@
     "setup-dbs": "psql -f db/setup.sql",
     "seed": "node db/seeds/run-seed.js",
     "seed-test": "NODE_ENV=test node db/seeds/run-seed.js",
+    "seed-prod": "NODE_ENV=production npm run seed",
     "build-docs": "cd docs && npm run build -- --out-dir ../public/build",
     "dev-docs": "cd docs && npm start"
   },

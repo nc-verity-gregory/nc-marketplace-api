@@ -16,17 +16,18 @@ exports.selectItems = async (category_name, limit, p, queries) => {
   }
 
   // default query string
-  let queryStr = `WITH allItems AS (
-    SELECT items.*
+  let queryStr = `WITH all_Items AS (
+    SELECT items.item_id, items.item_name, items.description, items.img_url, items.price, items.category_name, users.username AS seller_name
     FROM items
+    LEFT JOIN users ON items.listed_by = users.user_id
     LEFT JOIN orders ON items.item_id = orders.item_id
     WHERE orders.item_id IS NULL
 ),
 totalCount AS (
-    SELECT COUNT(*) ::INT as total FROM allItems
+    SELECT COUNT(*) ::INT as total FROM all_Items
 )
 SELECT DISTINCT *, (SELECT total FROM totalCount) as total_items
-FROM allItems`;
+FROM all_Items`;
 
   // filter by category
   if (category_name) {
@@ -113,6 +114,11 @@ FROM allItems`;
     }
   }
 
+  // search by user id
+  if (queries.username) {
+    queryParams.push(queries.username);
+    queryStr += ` WHERE seller_name = $1`;
+  }
   // if no sort by, default ordering
   if (!queries.sort_by) {
     queryStr += ` ORDER BY item_name ASC`;
@@ -134,9 +140,10 @@ exports.selectItemById = async (item_id) => {
       msg: "item_id is a required field",
     });
   }
-  const { rows } = await db.query(`SELECT * FROM items WHERE item_id = $1`, [
-    item_id,
-  ]);
+  const { rows } = await db.query(
+    `SELECT items.item_id, items.item_name, items.description, items.img_url, items.price, items.category_name, users.username AS listed_by FROM items LEFT JOIN users ON items.listed_by = users.user_id WHERE item_id = $1`,
+    [item_id]
+  );
   if (rows.length === 0) {
     return Promise.reject({ status: 404, msg: "item not found" });
   }
@@ -177,20 +184,4 @@ exports.insertItem = async (item) => {
   ]);
 
   return rows[0];
-};
-
-exports.deleteItemById = async (item_id) => {
-  await db.query(`DELETE FROM orders WHERE item_id = $1 RETURNING *`, [
-    item_id,
-  ]);
-  await db.query(`DELETE FROM baskets WHERE item_id = $1 RETURNING *`, [
-    item_id,
-  ]);
-  const { rows } = await db.query(
-    `DELETE FROM items WHERE item_id = $1 RETURNING *`,
-    [item_id]
-  );
-  if (rows.length === 0) {
-    return Promise.reject({ status: 404, msg: "item not found" });
-  }
 };
