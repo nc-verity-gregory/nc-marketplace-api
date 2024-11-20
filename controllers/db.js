@@ -1,5 +1,5 @@
 const db = require("../db/connection");
-const devData = require("../db/data/test/index");
+const devData = require("../db/data/dev/index");
 const testData = require("../db/data/test/index");
 const seed = require("../db/seeds/seed");
 const seedData = process.env.NODE_ENV === "test" ? testData : devData;

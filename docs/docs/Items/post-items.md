@@ -11,11 +11,12 @@ Adds a new item.
 Accepts the following keys:
 
 - item_name: String **required**
-- img_url: String **required**
+- img_url: String
 - price: Integer - Prices are measured in pence. Set to zero for free items **required**
 - listed_by - Number **required** - the user_id of the logged in user, must exist in users table
 - description: String
 - category_name: String - existing category_name
+
 
 ```json
 {
@@ -39,7 +40,7 @@ Accepts the following keys:
     "img_url": "https://test.com/Test-item.jpg",
     "price": 100,
     "category_name": "Relics",
-    "listed_by": "Paul-R"
+    "listed_by": 1
   }
 }
 ```

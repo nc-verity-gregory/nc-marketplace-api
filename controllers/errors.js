@@ -21,7 +21,7 @@ exports.handlePsqlErrors = (err, req, res, next) => {
     res.status(400).send({ msg: "Max integer size exceeded" });
   } else if (err.code === "22001") {
     res.status(400).send({ msg: "username must be at most 255 characters" });
-  } else if (err.code === "22P02") {
+  } else if (err.code === "22P02" || err.code === "23502") {
     res.status(400).send({
       msg: "Bad request",
     });

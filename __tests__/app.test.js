@@ -576,6 +576,22 @@ describe("POST /api/items", () => {
 
     expect(msg).toBe("Max integer size exceeded");
   });
+
+  it("400 - missing required keys", async () => {
+    const {
+      body: { msg },
+    } = await request(app)
+      .post("/api/items")
+      .send({
+        item_name: "Test item",
+        description: "testy mc test face",
+        img_url: "https://test.com/Test-item.jpg",
+        price: 100,
+        category_name: "Relics",
+      })
+      .expect(400);
+    expect(msg).toBe("Bad request");
+  });
 });
 
 describe("GET /api/items/:item_id", () => {
