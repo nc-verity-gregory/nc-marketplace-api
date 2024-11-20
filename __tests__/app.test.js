@@ -859,13 +859,6 @@ describe("DELETE /api/users/:username/items/:item_id", () => {
     } = await request(app).get("/api/users/Paul-R/basket");
     expect(items.length).toBe(1);
   });
-  it("204 - cascades to orders", async () => {
-    await request(app).delete("/api/users/Paul-C/items/5").expect(204);
-    const {
-      body: { items },
-    } = await request(app).get("/api/users/Paul-R/orders");
-    expect(items.length).toBe(0);
-  });
   it("404 - for a non-existent item_id", async () => {
     const { body } = await request(app)
       .delete("/api/users/Paul-R/items/1000")

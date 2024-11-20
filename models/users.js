@@ -121,9 +121,6 @@ WHERE listed_by = $1 AND item_id = $2`;
   if (foundItem.rows.length === 0) {
     return Promise.reject({ status: 404, msg: "No item matches parameters" });
   }
-  await db.query(`DELETE FROM orders WHERE item_id = $1  RETURNING *`, [
-    item_id,
-  ]);
   await db.query(`DELETE FROM baskets WHERE item_id = $1 RETURNING *`, [
     item_id,
   ]);
