@@ -18,6 +18,7 @@ Lists all available items. (Items that have already been ordered will not be lis
 | min_price     | Integer                                  | Optional      | The minimum price of returned items                                                                |
 | max_price     | Integer                                  | Optional      | The maximum price of returned items                                                                |
 | search        | String                                   | Optional      | A search term to filter items by. Will match words in the item_name, description or category_name. |
+| username      | String                                   | Optional      | Filter all items listed by a single user                                                           |
 
 **nb** Limit and p must be provided together or omitted for all results
 
